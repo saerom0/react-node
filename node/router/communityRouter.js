@@ -1,16 +1,14 @@
-const express = requir('express');
+const express = require('express');
 const router = express.Router();
 
-const { Post } = require('../model/postSchema');
-const { Counter } = require('../model/counterSchema');
+const { Post } = require('../model/postSchema.js');
+const { Counter } = require('../model/counterSchema.js');
 
 //create 요청처리
 router.post('/create', (req, res) => {
 	Counter.findOne({ name: 'counter' })
 		.exec()
 		.then((doc) => {
-			console.log(doc);
-
 			const PostModel = new Post({
 				title: req.body.title,
 				content: req.body.content,
