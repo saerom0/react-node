@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const app = express();
 const port = 5000;
+const { Post } = require('./model/postSchema');
 
 app.use(express.static(path.join(__dirname, '../react/build')));
 app.use(express.json());
@@ -29,7 +30,19 @@ app.get('*', (req, res) => {
 });
 
 //react로 부터 받은 요청처리
-app.post('/api/send', (req, res) => {
+app.post('/api/create', (req, res) => {
 	console.log(req.body);
-	res.json({ success: true, result: req.body.name + '2' });
+
+	const PostModel = new Post({
+		title: req.body.title,
+		content: req.body.content,
+	});
+
+	PostModel.save()
+		.then(() => {
+			res.json({ success: true });
+		})
+		.catch((err) => {
+			res.json({ success: false });
+		});
 });
