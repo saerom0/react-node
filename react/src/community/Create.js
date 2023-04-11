@@ -1,19 +1,29 @@
 import axios from 'axios';
 import { useState } from 'react';
 import Layout from '../common/Layout';
+import { useNavigate } from 'react-router-dom';
 
 function Create() {
 	const [tit, setTit] = useState('');
 	const [con, setCon] = useState('');
+	const navigate = useNavigate();
 
 	const handleCreate = () => {
 		const item = { title: tit, content: con };
 
 		axios
 			.post('/api/create', item)
-			.then((res) => console.log(res))
+			.then((res) => {
+				if (res.data.success) {
+					alert('글 저장이 완료되었습니다.');
+					navigate('/list');
+				} else {
+					alert('글 저장에 실패하였습니다.');
+				}
+			})
 			.catch((err) => console.log(err));
 	};
+
 	return (
 		<Layout name={'Post'}>
 			<label htmlFor='tit'>Title</label>

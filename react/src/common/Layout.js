@@ -1,4 +1,4 @@
-function Layout(children, name) {
+function Layout({ children, name }) {
 	return (
 		<main className={`content ${name}`}>
 			<div className='inner'>
