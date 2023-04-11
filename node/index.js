@@ -3,7 +3,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const app = express();
 const port = 5000;
+
 const { Post } = require('./model/postSchema');
+const { Counter } = require('./model/counterSchema');
 
 app.use(express.static(path.join(__dirname, '../react/build')));
 app.use(express.json());
@@ -21,7 +23,6 @@ app.listen(port, () => {
 		.catch((err) => console.log(err));
 });
 
-//기본 라우터 설정
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '../react/build/index.html'));
 });
@@ -31,20 +32,27 @@ app.get('*', (req, res) => {
 
 //create 요청처리
 app.post('/api/create', (req, res) => {
-	console.log(req.body);
+	Counter.findOne({ name: 'counter' })
+		.exec()
+		.then((doc) => {
+			console.log(doc);
 
-	const PostModel = new Post({
-		title: req.body.title,
-		content: req.body.content,
-	});
+			const PostModel = new Post({
+				title: req.body.title,
+				content: req.body.content,
+				communityNum: doc.communityNum,
+			});
 
-	PostModel.save()
-		.then(() => {
-			res.json({ success: true });
+			PostModel.save().then(() => {
+				Counter.updateOne(
+					{ name: 'counter' },
+					{ $inc: { communityNum: 1 } }
+				).then(() => {
+					res.json({ success: true });
+				});
+			});
 		})
-		.catch((err) => {
-			res.json({ success: false });
-		});
+		.catch((err) => console.log(err));
 });
 
 //read 요청처리
