@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import Layout from '../common/Layout';
 
 function Create() {
 	const [tit, setTit] = useState('');
@@ -14,7 +15,7 @@ function Create() {
 			.catch((err) => console.log(err));
 	};
 	return (
-		<div className='App'>
+		<Layout name={'Post'}>
 			<label htmlFor='tit'>Title</label>
 			<input
 				type='text'
@@ -36,7 +37,7 @@ function Create() {
 			<br />
 
 			<button onClick={handleCreate}>SEND</button>
-		</div>
+		</Layout>
 	);
 }
 
