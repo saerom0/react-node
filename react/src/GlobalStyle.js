@@ -10,6 +10,9 @@ ul,ol,li {
 a{
   text-decoration: none; color: #777;
 }
+body{
+  background-color: #efefef;
+}
 `;
 
 export default GlobalStyle;
