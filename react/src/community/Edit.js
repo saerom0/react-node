@@ -62,7 +62,7 @@ function Edit() {
 				name='content'
 				id='content'
 				cols='30'
-				rows='5'
+				rows='5 '
 				value={content || ''}
 				onChange={(e) => setContent(e.target.value)}
 			></textarea>
