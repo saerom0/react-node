@@ -14,9 +14,7 @@ app.use('/api/community', require('./router/communityRouter.js'));
 //MongoDB 접속
 app.listen(port, () => {
 	mongoose
-		.connect(
-			'mongodb+srv://saerom:!abc1234@cluster0.nfm6xba.mongodb.net/?retryWrites=true&w=majority'
-		)
+		.connect('mongodb+srv://saerom:!abc1234@cluster0.ijebi5m.mongodb.net/test')
 		.then(() =>
 			console.log(`Server app listening on Port ${port} with MongoDB`)
 		)
