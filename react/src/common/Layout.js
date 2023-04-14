@@ -21,6 +21,8 @@ const MainStyle = styled.main`
 				display: block;
 			}
 			input[type='text'],
+			input[type='password'],
+			input[type='email'],
 			textarea {
 				width: 50%;
 				min-width: 300px;
