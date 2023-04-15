@@ -1,5 +1,7 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import firebase from '../firebase';
 
 const HeaderStyle = styled.header`
 	width: 350px;
@@ -39,13 +41,46 @@ const Util = styled.ul`
 	li {
 		a {
 			font: 14px/1 'arial';
-			color: #555;
+			color: #eee;
+			padding: 5px 15px;
+			border: 1px solid #eee;
+			cursor: pointer;
+			&:hover {
+				background: #eee;
+				color: #000;
+			}
+		}
+	}
+`;
+
+const LoginUtil = styled.ul`
+	position: absolute;
+	bottom: 50px;
+	left: 50px;
+	display: flex;
+	gap: 20px;
+	p {
+		color: aqua;
+	}
+	a {
+		display: inline-block;
+		color: #eee;
+		font: 14px/1 'arial';
+		padding: 5px;
+		border: 1px solid #eee;
+		cursor: pointer;
+		&:hover {
+			background: #eee;
+			color: #000;
 		}
 	}
 `;
 
 function Header() {
 	const activeStyle = { color: 'violet' };
+	const navigate = useNavigate();
+	const user = useSelector((store) => store.user);
+	console.log(user);
 	return (
 		<HeaderStyle>
 			<Logo>
@@ -60,33 +95,50 @@ function Header() {
 						Show List
 					</NavLink>
 				</li>
-				<li>
-					<NavLink
-						to='/create'
-						style={({ isActive }) => (isActive ? activeStyle : null)}
-					>
-						Write Post
-					</NavLink>
-				</li>
+				{user.accessToken !== '' && (
+					<li>
+						<NavLink
+							to='/create'
+							style={({ isActive }) => (isActive ? activeStyle : null)}
+						>
+							Write Post
+						</NavLink>
+					</li>
+				)}
 			</Gnb>
-			<Util>
-				<li>
-					<NavLink
-						to='/login'
-						style={({ isActive }) => (isActive ? activeStyle : null)}
+			{user.accessToken === '' ? (
+				<Util>
+					<li>
+						<NavLink
+							to='/login'
+							style={({ isActive }) => (isActive ? activeStyle : null)}
+						>
+							Login
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							to='/join'
+							style={({ isActive }) => (isActive ? activeStyle : null)}
+						>
+							Join
+						</NavLink>
+					</li>
+				</Util>
+			) : (
+				<LoginUtil>
+					<p>{`${user.displayName}님 반갑습니다!`}</p>
+					<a
+						onClick={() => {
+							firebase.auth().signOut();
+							alert('로그아웃 되었습니다. 메인페이지로 이동합니다.');
+							navigate('/');
+						}}
 					>
-						Login
-					</NavLink>
-				</li>
-				<li>
-					<NavLink
-						to='/join'
-						style={({ isActive }) => (isActive ? activeStyle : null)}
-					>
-						Join
-					</NavLink>
-				</li>
-			</Util>
+						로그아웃
+					</a>
+				</LoginUtil>
+			)}
 		</HeaderStyle>
 	);
 }

@@ -10,7 +10,7 @@ const userSlice = createSlice({
 	reducers: {
 		loginUser: (state, action) => {
 			state.displayName = action.payload.displayName;
-			state.uid = action.pay.uid;
+			state.uid = action.payload.uid;
 			state.accessToken = action.payload.accessToken;
 		},
 		logoutUser: (state) => {
