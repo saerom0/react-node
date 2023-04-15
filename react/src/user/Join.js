@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import firebase from '../firebase';
+import { logoutUser } from '../redux/userSlice';
+import { useDispatch } from 'react-redux';
 
 const BtnSet = styled.div`
 	display: flex;
@@ -16,6 +18,7 @@ function Join() {
 	const [pwd1, setPwd1] = useState('');
 	const [pwd2, setPwd2] = useState('');
 	const [name, setName] = useState('');
+	const dispatch = useDispatch();
 
 	const handleJoin = async () => {
 		if (!(name && email && pwd1 && pwd2))
@@ -26,7 +29,9 @@ function Join() {
 			.createUserWithEmailAndPassword(email, pwd1);
 		await createdUser.user.updateProfile({ displayName: name });
 		console.log(createdUser.user);
-		navigate('/login');
+		dispatch(logoutUser());
+		alert('회원가입이 성공적으로 완료되었습니다. 로그인 하세요.');
+		window.location.replace('/login');
 	};
 	return (
 		<Layout name={'Join'}>

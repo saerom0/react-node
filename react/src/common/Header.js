@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../redux/userSlice';
 import firebase from '../firebase';
 
 const HeaderStyle = styled.header`
@@ -79,8 +80,9 @@ const LoginUtil = styled.ul`
 function Header() {
 	const activeStyle = { color: 'violet' };
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const user = useSelector((store) => store.user);
-	console.log(user);
+
 	return (
 		<HeaderStyle>
 			<Logo>
@@ -132,6 +134,7 @@ function Header() {
 						onClick={() => {
 							firebase.auth().signOut();
 							alert('로그아웃 되었습니다. 메인페이지로 이동합니다.');
+							dispatch(logoutUser());
 							navigate('/');
 						}}
 					>

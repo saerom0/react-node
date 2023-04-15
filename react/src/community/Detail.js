@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const DetailStyle = styled.div`
 	width: 100%;
@@ -21,6 +22,7 @@ function Detail() {
 	const [detail, setDetail] = useState(null);
 	const params = useParams();
 	const navigate = useNavigate();
+	const user = useSelector((store) => store.user);
 	const item = useMemo(() => ({ num: params.num }), [params]);
 
 	const handleDelete = () => {
@@ -58,14 +60,17 @@ function Detail() {
 						<h2>{detail?.title}</h2>
 						<p>{detail?.content}</p>
 					</DetailStyle>
-					<BtnStyle>
-						<button>
-							<Link to={`/edit/${detail?.communityNum}`}>Edit</Link>
-						</button>
-						<button onClick={handleDelete}>
-							<Link>Delete</Link>
-						</button>
-					</BtnStyle>
+
+					{user.accessToken !== '' && (
+						<BtnStyle>
+							<button>
+								<Link to={`/edit/${detail?.communityNum}`}>Edit</Link>
+							</button>
+							<button onClick={handleDelete}>
+								<Link>Delete</Link>
+							</button>
+						</BtnStyle>
+					)}
 				</>
 			}
 		</Layout>
