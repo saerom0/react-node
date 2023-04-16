@@ -16,7 +16,9 @@ app.use('/api/user', require('./router/userRouter.js'));
 //MongoDB 접속
 app.listen(port, () => {
 	mongoose
-		.connect('mongodb+srv://saerom:!abc1234@cluster0.ijebi5m.mongodb.net/test')
+		.connect(
+			'mongodb+srv://saerom:!abc1234@cluster0.ijebi5m.mongodb.net/?retryWrites=true&w=majority'
+		)
 		.then(() =>
 			console.log(`Server app listening on Port ${port} with MongoDB`)
 		)

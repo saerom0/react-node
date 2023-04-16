@@ -6,7 +6,7 @@ const { Counter } = require('../model/counterSchema');
 router.post('/join', (req, res) => {
 	const temp = req.body;
 
-	Counter.findOne({ name: 'Counter' })
+	Counter.findOne({ name: 'counter' })
 		.then((doc) => {
 			temp.userNum = doc.userNum;
 
