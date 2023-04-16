@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import firebase from '../firebase';
 import { logoutUser } from '../redux/userSlice';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 const BtnSet = styled.div`
 	display: flex;
@@ -32,6 +33,15 @@ function Join() {
 		dispatch(logoutUser());
 		alert('회원가입이 성공적으로 완료되었습니다. 로그인 하세요.');
 		window.location.replace('/login');
+		const item = {
+			email: createdUser.user.multiFactor.user.email,
+			displayName: createdUser.user.multiFactor.user.displayName,
+			uid: createdUser.user.multiFactor.user.uid,
+		};
+		axios.post('/api/user/join', item).then((res) => {
+			if (res.data.success) navigate('/login');
+			else return alert('회원가입에 실패했습니다.');
+		});
 	};
 	return (
 		<Layout name={'Join'}>

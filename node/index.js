@@ -10,6 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 
 //community전용 라우터
 app.use('/api/community', require('./router/communityRouter.js'));
+//user전용 라우터
+app.use('/api/user', require('./router/userRouter.js'));
 
 //MongoDB 접속
 app.listen(port, () => {
