@@ -3,18 +3,22 @@ const router = express.Router();
 
 const { Post } = require('../model/postSchema.js');
 const { Counter } = require('../model/counterSchema.js');
+const { user, User } = require('../model/userSchema.js');
 
 //create 요청처리
 router.post('/create', (req, res) => {
+	const temp = req.body;
 	Counter.findOne({ name: 'counter' })
 		.exec()
 		.then((doc) => {
-			const PostModel = new Post({
-				title: req.body.title,
-				content: req.body.content,
-				communityNum: doc.communityNum,
-			});
-
+			temp.communityNum = doc.communityNum;
+			console.log(temp);
+			User.findOne({ uid: temp.uid })
+				.exec()
+				.then((doc) => {
+					temp.writer = doc._id;
+				});
+			const PostModel = new Post(temp);
 			PostModel.save().then(() => {
 				Counter.updateOne(
 					{ name: 'counter' },
