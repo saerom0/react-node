@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import firebase from '../firebase';
-import { logoutUser } from '../redux/userSlice';
+import { loginUser } from '../redux/userSlice';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
@@ -30,17 +30,19 @@ function Join() {
 			.createUserWithEmailAndPassword(email, pwd1);
 		await createdUser.user.updateProfile({ displayName: name });
 		console.log(createdUser.user);
-		dispatch(logoutUser());
 		alert('회원가입이 성공적으로 완료되었습니다. 로그인 하세요.');
-		window.location.replace('/login');
+		navigate('/login');
+
 		const item = {
 			email: createdUser.user.multiFactor.user.email,
 			displayName: createdUser.user.multiFactor.user.displayName,
 			uid: createdUser.user.multiFactor.user.uid,
 		};
 		axios.post('/api/user/join', item).then((res) => {
-			if (res.data.success) navigate('/login');
-			else return alert('회원가입에 실패했습니다.');
+			if (res.data.success) {
+				dispatch(loginUser(createdUser.user));
+				navigate('/login');
+			} else return alert('회원가입에 실패했습니다.');
 		});
 	};
 	return (
